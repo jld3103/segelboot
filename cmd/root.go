@@ -139,7 +139,7 @@ func deleteBootEntry(bootEntry efibootmgr.BootEntry) error {
 func deleteBootEntriesForEntry(bootEntries []efibootmgr.BootEntry, entry *config.Entry) error {
 	for _, bootEntry := range bootEntries {
 		if matchLabelWithEntry(bootEntry, entry) {
-			fmt.Printf("Found existing boot entry %s for entry '%s'\n. Removing entry", bootEntry.Bootnum, entry.ID)
+			fmt.Printf("Found existing boot entry %s for entry '%s'.\nRemoving entry\n", bootEntry.Bootnum, entry.ID)
 			err := deleteBootEntry(bootEntry)
 			if err != nil {
 				return err
