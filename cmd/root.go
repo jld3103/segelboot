@@ -29,10 +29,7 @@ func NewRootCmd() *cobra.Command {
 			}
 
 			out, err := efibootmgr.ExecuteWithOutput(
-				[]efibootmgr.Flag{
-					efibootmgr.FlagVerbose,
-					efibootmgr.FlagUnicode,
-				},
+				[]efibootmgr.Flag{},
 				map[efibootmgr.Option]string{},
 			)
 			if err != nil {
@@ -103,8 +100,6 @@ func NewRootCmd() *cobra.Command {
 func deleteBootEntry(bootEntry efibootmgr.BootEntry) error {
 	err := efibootmgr.Execute(
 		[]efibootmgr.Flag{
-			efibootmgr.FlagVerbose,
-			efibootmgr.FlagUnicode,
 			efibootmgr.FlagDeleteBootnum,
 		},
 		map[efibootmgr.Option]string{
@@ -137,8 +132,6 @@ func deleteBootEntriesForEntry(bootEntries []efibootmgr.BootEntry, entry *config
 func createBootEntry(blockDevice lsblk.BlockDevice, partitionIndex string, entry *config.Entry) error {
 	err := efibootmgr.Execute(
 		[]efibootmgr.Flag{
-			efibootmgr.FlagVerbose,
-			efibootmgr.FlagUnicode,
 			efibootmgr.FlagCreate,
 		},
 		map[efibootmgr.Option]string{

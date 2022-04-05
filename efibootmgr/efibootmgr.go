@@ -13,6 +13,8 @@ func Execute(flags []Flag, options map[Option]string, args ...string) error {
 }
 
 func ExecuteWithOutput(flags []Flag, options map[Option]string, args ...string) (string, error) {
+	flags = append(flags, FlagVerbose, FlagUnicode)
+
 	cmdParts := []string{"efibootmgr"}
 	for _, flag := range flags {
 		cmdParts = append(cmdParts, fmt.Sprintf("--%s", string(flag)))
