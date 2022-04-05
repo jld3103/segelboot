@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -75,6 +76,14 @@ func NewRootCmd() *cobra.Command {
 						os.Exit(1)
 					}
 				}
+
+				if c.Timeout != nil {
+					err = setTimeout(*c.Timeout)
+					if err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+				}
 			}
 		},
 	}
@@ -95,6 +104,20 @@ func NewRootCmd() *cobra.Command {
 	)
 
 	return rootCmd
+}
+
+func setTimeout(seconds int) error {
+	err := efibootmgr.Execute(
+		[]efibootmgr.Flag{},
+		map[efibootmgr.Option]string{
+			efibootmgr.OptionTimeout: strconv.Itoa(seconds),
+		},
+	)
+	if err != nil {
+		return fmt.Errorf("failed to set timeout: %w", err)
+	}
+
+	return nil
 }
 
 func deleteBootEntry(bootEntry efibootmgr.BootEntry) error {

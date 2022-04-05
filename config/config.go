@@ -7,6 +7,7 @@ import (
 )
 
 type Config struct {
+	Timeout *int
 	Entries []*Entry
 }
 
@@ -26,7 +27,16 @@ func ReadConfigFile(path string) (*Config, error) {
 	c := &Config{}
 
 	for _, section := range cfg.Sections() {
-		if section.Name() != "DEFAULT" {
+		if section.Name() == "DEFAULT" {
+			if section.Key("timeout").String() != "" {
+				var timeout int
+				timeout, err = section.Key("timeout").Int()
+				if err != nil {
+					return nil, fmt.Errorf("failed to parse timeout: %w", err)
+				}
+				c.Timeout = &timeout
+			}
+		} else {
 			for _, key := range []string{"name", "partition", "loader", "cmdline"} {
 				if section.Key(key).String() == "" {
 					//nolint:goerr113
